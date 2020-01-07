@@ -1,0 +1,26 @@
+{
+  "name": "monzo-web-crawler",
+  "version": "0.0.0",
+  "description": "A web crawler designed as an exercise as part of the job application for Backend Engineer at Monzo",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cazaimi/web-crawler-test.git"
+  },
+  "keywords": [
+    "web-crawler",
+    "nodejs"
+  ],
+  "author": "Anmol Shukla",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cazaimi/web-crawler-test/issues"
+  },
+  "homepage": "https://github.com/Cazaimi/web-crawler-test#readme"
+}
