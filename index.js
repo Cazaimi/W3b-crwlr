@@ -1,9 +1,7 @@
-const queue = require('./queue');
+const orchestrator = require('./lib/orchestrator');
 
-console.log(queue);
+let webpage = process.argv[2];
 
-let q = new queue([1, 2, 3]);
-
-console.log('q:', q);
-
-console.log(q.firstElement());
+orchestrator(webpage, (...results) => {
+  console.log('results:', results);
+});
