@@ -17,4 +17,6 @@ orchestrator(webpage, { sameHost: true }, (err, results) => {
   if (!file) {
     console.info(results);
   }
+
+  process.exit();
 });
