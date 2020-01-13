@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 module.exports = {
   simplePageWithTags () {
     return '<html><head>' + 
@@ -83,5 +85,37 @@ module.exports = {
     '    </div>' + 
     '  ' + 
     '</body></html>'
+  },
+
+  pageWithOnlyALinkToItself (webpage) {
+    return `<html> \
+      <body> \
+        <a href='${webpage}'>Something</a> \
+      </body> \
+    </html>`;
+  },
+
+  pageWithTwoLevelWebTree () {
+    let level1 = '<html> \
+      <body> \
+        <a href="https://www.google.com">Google</a> \
+        <a href="https://is.the.root/twitter">Twitter</a> \
+        <a href="https://is.the.root/path">Path</a> \
+      </body> \
+    </html>',
+    level2 = {
+      path: '<html> \
+          <body> \
+            <a href="https://www.twitter.com">Twitter</a> \
+          </body> \
+        </html>',
+      twitter: '<html>\
+          <body>\
+            <a href="https://www.cazaimi.tech">This is me!</a>\
+          </body>\
+        </html>'
+      };
+
+    return { level1, level2 };     
   }
 };

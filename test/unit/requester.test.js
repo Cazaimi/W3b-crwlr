@@ -6,48 +6,102 @@ const expect = require('chai').expect,
 
 /* globals describe, it */
 
-describe('parse HTML', function () {
-  it.only('should make a get request to the address provided', function (done) {
-    let address = 'https://www.google.com',
-      path = '/something';
+describe('requester', function () {
+  describe('.sendRequest', function () {
+    it('should make a get request to the address provided', function (done) {
+      let address = 'https://www.google.com',
+        path = '/something';
 
-    nock(address)
-      .get(path)
-      .reply(200, { page: 'hit' });
+      nock(address)
+        .get(path)
+        .reply(200, { page: 'hit' });
 
-    requester.sendRequest(address + path, requester.createAgent(), function (err, res) {
-      if (err) { return done(err); }
+      requester.sendRequest(address + path, requester.createAgent(), function (err, res) {
+        if (err) { return done(err); }
 
-      let response = JSON.parse(res);
+        let response = JSON.parse(res);
 
-      expect(response).to.have.property('page', 'hit');
+        expect(response).to.have.property('page', 'hit');
 
-      return done();
+        return done();
+      });
+    });
+
+    it('should make a get request using the http protocol if the url\'s protocol is http', function (done) {
+      let address = 'http://www.google.com',
+        path = '/something';
+
+      nock(address)
+        .get(path)
+        .reply(200, { page: 'hit' });
+
+      requester.sendRequest(address + path, requester.createAgent(10, 'http'), function (err, res) {
+        if (err) { return done(err); }
+
+        let response = JSON.parse(res);
+
+        expect(response).to.have.property('page', 'hit');
+
+        return done();
+      });
+    });
+
+    it('should make a get request using the https protocol if the url\'s protocol is https', function (done) {
+      let address = 'https://www.google.com',
+        path = '/something';
+
+      nock(address)
+        .get(path)
+        .reply(200, { page: 'hit' });
+
+      requester.sendRequest(address + path, requester.createAgent(10, 'https'), function (err, res) {
+        if (err) { return done(err); }
+
+        let response = JSON.parse(res);
+
+        expect(response).to.have.property('page', 'hit');
+
+        return done();
+      });
     });
   });
 
-  it('should parse all tags with a single quote href', function () {
-    let singleQuotedLinks = ['/index.html',
-        '/projects.html',
-        '/posts.html',
-        '/about.html',
-        '/contact.html'],
-      parsedTags = parseHtml.parseUsingNodeHtmlParse(fixtures.simplePageWithTags());
+  describe('.formatUrl', function () {
+    it('should resolve child URL if it\'s relative', function () {
+      let parentUrl = 'https://www.google.com',
+        childUrl = '/search?q=some_random_google_search',
+        resolvedUrl = requester.formatUrl(parentUrl, childUrl);
 
-    singleQuotedLinks.forEach(function (link) {
-      expect(parsedTags).to.include(link);
+      expect(resolvedUrl).to.equal(parentUrl + childUrl);
     });
-  });
 
-  it('should parse all tags with a double quote href', function () {
-    let doubleQuotedLinks = ['https://www.getpostman.com',
-        'http://creativecommons.org/licenses/by-nc/4.0/',
-        'https://jekyllrb.com/',
-        'https://icons8.com/'],
-      parsedTags = parseHtml.parseUsingNodeHtmlParse(fixtures.simplePageWithTags());
+    it('should resolve child URL if it\'s relative and contains ..', function () {
+      let parentUrl = 'https://www.google.com',
+        path = '/mail/drive',
+        childUrlRelativePath = '../..',
+        childUrl = '/search?q=some_random_google_search',
+        resolvedUrl = requester.formatUrl(parentUrl + path, childUrlRelativePath + childUrl);
 
-    doubleQuotedLinks.forEach(function (link) {
-      expect(parsedTags).to.include(link);
+      expect(resolvedUrl).to.equal(parentUrl + childUrl);
+    });
+
+    it('should resolve child URL if it\'s relative and contains .', function () {
+      let parentUrl = 'https://www.google.com',
+        mail = '/mail',
+        drive = '/drive',
+        childUrlRelativePath = '.',
+        childUrl = '/search?q=some_random_google_search',
+        resolvedUrl = requester.formatUrl(parentUrl + mail + drive, childUrlRelativePath + childUrl);
+
+      expect(resolvedUrl).to.equal(parentUrl + mail + childUrl);
+    });
+
+    it('should resolve child URL if it\'s absolute', function () {
+      let parentUrl = 'https://www.google.com',
+        childUrl = 'https://mail.google.com/',
+        resolvedUrl = requester.formatUrl(parentUrl, childUrl);
+
+      expect(resolvedUrl).to.equal(childUrl);
     });
   });
 });

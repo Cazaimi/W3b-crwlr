@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/Cazaimi/web-crawler-test#readme",
   "dependencies": {
+    "commander": "4.1.0",
     "follow-redirects": "1.9.0",
     "hashmap": "2.4.0",
     "lodash": "4.17.15",

@@ -27,8 +27,6 @@ function getTestPaths (dir, fileList) {
   });
 
   return fileList.filter(function (file) {
-    console.log('path.extname(file):', path.extname(file));
-
     return path.extname(file) === '.js';
   });
 }
