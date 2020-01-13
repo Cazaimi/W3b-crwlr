@@ -44,6 +44,9 @@ describe('orchestrator', function () {
     orchestrator(webpage, {}, function (err, results) {
       if (err) { return done(err); }
 
+      console.log('results:', JSON.stringify(results));
+      
+
       expect(results).to.eql({
         'https://is.the.root': {
           'https://www.google.com/': {},

@@ -1,7 +1,6 @@
 const expect = require('chai').expect,
   nock = require('nock'),
 
-  fixtures = require('../fixtures/inputPages'),
   requester = require('../../lib/requester');
 
 /* globals describe, it */
